@@ -27,6 +27,19 @@ Documentation can be generated with [ExDoc][] and published on [HexDocs][]. Once
 
 ## Configuration
 
+This SDK uses a `GenServer` to fetch an access token on application start up and manage a timed refresh (currently defaulting to 23 hours, based on the default auth0 token lifetime of 24 hours). Add the TokenManager to your application's supervision tree.
+
+```elixir
+def start(_type, _args) do
+    children = [
+      OpenFGA.OAuth2.TokenManager
+    ]
+
+    opts = [strategy: :one_for_one, name: MyApp.Supervisor]
+    Supervisor.start_link(children, opts)
+  end
+```
+
 You can override the URL of your server (e.g. if you have a separate development and production server in your
 configuration files) by setting a `:base_url` in the config. Additional values must be set for the library to work properly with FGA
 
