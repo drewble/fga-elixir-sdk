@@ -66,7 +66,7 @@ defmodule OpenFGA.OAuth2.TokenManager do
       :tesla,
       OpenFGA.Connection,
       [middleware: [{Tesla.Middleware.BearerAuth, token: access_token}]]
-      |> Keyword.merge(existing_config)
+      |> Keyword.merge(existing_config, fn :middleware, v1, v2 -> v1 ++ v2 end)
       |> dbg
     )
 
